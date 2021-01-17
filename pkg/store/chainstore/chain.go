@@ -1,4 +1,4 @@
-package chain
+package chainstore
 
 import (
 	"github.com/sequix/casync-snapshotter/pkg/log"

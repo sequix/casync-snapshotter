@@ -1,4 +1,4 @@
-package memory
+package memstore
 
 import (
 	"flag"
@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	flagCacheSize = flag.Int("memcache-size-mib", 1024, "memory cache size in MiB")
+	flagMaxBytes = flag.Int("memcache-max-bytes", 1024 * 1024 * 1024, "memory cache size in bytes")
 )
 
 type MemCache struct {
@@ -19,7 +19,7 @@ type MemCache struct {
 
 func New() *MemCache {
 	mc := &MemCache{
-		fc: fastcache.New(*flagCacheSize * 1024 * 1024),
+		fc: fastcache.New(*flagMaxBytes),
 	}
 
 	// TODO fscache metrics

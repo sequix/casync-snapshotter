@@ -1,4 +1,4 @@
-package s3
+package s3store
 
 import (
 	"bytes"
@@ -39,7 +39,7 @@ type S3Store struct {
 	bucket     string
 }
 
-func New() (*S3Store, error) {
+func New() *S3Store {
 	ak := *flagS3AccessKey
 	sk := *flagS3SecretKey
 	if len(ak) == 0 {
@@ -52,10 +52,10 @@ func New() (*S3Store, error) {
 		Credentials: credentials.NewStaticCredentials(ak, sk, ""),
 	})
 	if err != nil {
-		return nil, fmt.Errorf("create s3 session: %w", err)
+		log.G.WithError(err).Fatal("create s3 session")
 	}
 
-	store := &S3Store{
+	return &S3Store{
 		session: sess,
 		client:  s3.New(sess),
 		uploader: s3manager.NewUploader(sess, func(u *s3manager.Uploader) {
@@ -68,7 +68,6 @@ func New() (*S3Store, error) {
 		}),
 		bucket: *flagS3Bucket,
 	}
-	return store, nil
 }
 
 // TODO: no uploading for same chunk

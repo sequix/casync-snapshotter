@@ -13,7 +13,7 @@ import (
 	"github.com/sequix/casync-snapshotter/pkg/fs"
 	"github.com/sequix/casync-snapshotter/pkg/log"
 	"github.com/sequix/casync-snapshotter/pkg/oci"
-	"github.com/sequix/casync-snapshotter/pkg/store/s3"
+	"github.com/sequix/casync-snapshotter/pkg/store/s3store"
 )
 
 const helpMsg = `usage: casnap-conv [options] <image> <seedImage>
@@ -61,11 +61,7 @@ func main() {
 		seedImageName = flag.Arg(1)
 	)
 
-	store, err := s3.New()
-	if err != nil {
-		log.G.WithError(err).Errorf("init s3 client")
-		return
-	}
+	store := s3store.New()
 	casync.Init()
 
 	// 1.pull image
